@@ -1,5 +1,8 @@
 # CheckPwn
 
+![Built with Claude](https://img.shields.io/badge/built_with-Claude-da7756?logo=claude&logoColor=white)
+![Human code](https://img.shields.io/badge/human_written_code-0%25-red)
+
 A local-first checklist app for penetration testers. It walks you through every chapter of the OWASP Web Security Testing Guide (WSTG v4.2) with built-in guidance and recommended commands, lets you attach your own notes, custom scripts, and reference links to each test, and tracks progress across as many pentest engagements as you need — all stored locally, nothing leaves your machine.
 
 ![Checklist overview](docs/screenshots/checklist-dark.png)
