@@ -1,25 +1,38 @@
 # CheckPwn
 
-Lokální aplikace pro penetrační testery — interaktivní checklist podle OWASP Web Security Testing Guide (WSTG v4.2), s návody, vlastními poznámkami/skripty a odkazy na materiály (YouTube, X…).
+A local-first checklist app for penetration testers. It walks you through every chapter of the OWASP Web Security Testing Guide (WSTG v4.2) with built-in guidance and recommended commands, lets you attach your own notes, custom scripts, and reference links to each test, and tracks progress across as many pentest engagements as you need — all stored locally, nothing leaves your machine.
 
-## Spuštění
+![Checklist overview](docs/screenshots/checklist-dark.png)
+
+## Features
+
+- Full WSTG checklist (Information Gathering, Authentication, Session Management, Input Validation, API Testing, …) with a short description and recommended tools/commands for every test.
+- Set a status per test (not tested / in progress / pass / vulnerable / N/A), add your own notes, custom CLI commands, and links to external material — with automatic YouTube thumbnails.
+- Don't need a built-in command? Remove it per test, with one click to restore it later.
+- Set a target (domain/IP) per pentest and it's auto-filled into every prepared command — copy, paste, go.
+- Progress bar up top for the whole engagement, per-chapter progress in the sidebar.
+- Multiple named pentests — switch between them any time, each with its own saved state.
+- Autosave to a local JSON file (debounced), plus full export/import.
+- English and Czech UI, light and dark mode, responsive layout.
+
+![Test detail with tools, custom commands, notes and a link thumbnail](docs/screenshots/test-detail-dark.png)
+
+## Getting started
 
 ```
 npm install
 npm run dev
 ```
 
-Otevře se web na `http://localhost:5173` (frontend, Vite) a lokální API server na `http://localhost:4174` (Express), který ukládá checklisty jako JSON soubory do složky `data/`. Oba servery se spouští společně příkazem `npm run dev`.
+This starts the frontend (Vite) on `http://localhost:5173` and a local API server (Express) on `http://localhost:4174` that stores checklists as JSON files in `data/`. Both run together via `npm run dev`.
 
-## Funkce
+## Light mode & mobile
 
-- Checklist podle všech kapitol WSTG (Information Gathering, Authentication, Session Management, Input Validation, API Testing…) s krátkým popisem a doporučenými nástroji/příkazy pro každou metodu.
-- U každého testu lze nastavit stav (netestováno / probíhá / OK / zranitelné / N/A), přidat vlastní poznámky, vlastní CLI příkazy a odkazy na externí materiály (YouTube náhledy, X posty, dokumentace).
-- Progress bar nahoře ukazuje celkový postup, sidebar ukazuje postup po kapitolách.
-- Více pojmenovaných pentestů — lze mezi nimi přepínat, každý má vlastní stav uložený zvlášť.
-- Automatické ukládání do souboru (s debounce), export/import celého checklistu jako JSON.
-- Světlý i tmavý režim, responsivní layout.
+<p>
+  <img src="docs/screenshots/checklist-light.png" width="560" alt="Light mode" />
+  <img src="docs/screenshots/mobile-dark.png" width="220" alt="Mobile view" />
+</p>
 
 ## Data
 
-Checklisty se ukládají do `data/<id>.json` — tato složka je v `.gitignore`, protože může obsahovat citlivé informace o probíhajícím pentestu.
+Checklists are saved to `data/<id>.json` — this folder is gitignored, since it can contain sensitive information about an ongoing pentest.
