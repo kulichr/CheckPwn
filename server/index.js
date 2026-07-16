@@ -83,6 +83,7 @@ app.post('/api/projects', async (req, res) => {
       createdAt: now,
       updatedAt: now,
       testStates: req.body.testStates || {},
+      scanResults: req.body.scanResults || [],
     };
     await writeProject(project);
     res.status(201).json(project);
@@ -103,6 +104,7 @@ app.put('/api/projects/:id', async (req, res) => {
       createdAt: existing?.createdAt || now,
       updatedAt: now,
       testStates: req.body.testStates ?? existing?.testStates ?? {},
+      scanResults: req.body.scanResults ?? existing?.scanResults ?? [],
     };
     await writeProject(project);
     res.json(project);
@@ -133,6 +135,7 @@ app.post('/api/projects/import', async (req, res) => {
       createdAt: incoming.createdAt || now,
       updatedAt: now,
       testStates: incoming.testStates || {},
+      scanResults: incoming.scanResults || [],
     };
     await writeProject(project);
     res.status(201).json(project);

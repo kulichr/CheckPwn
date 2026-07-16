@@ -23,6 +23,26 @@ export interface TestState {
   hiddenTools: number[];
 }
 
+export type ScanTool = 'nuclei' | 'nmap';
+
+export interface ScanFinding {
+  id: string;
+  host: string;
+  port?: string;
+  protocol?: string;
+  name: string;
+  severity?: string;
+  detail?: string;
+}
+
+export interface ScanImportBatch {
+  id: string;
+  tool: ScanTool;
+  fileName: string;
+  importedAt: string;
+  findings: ScanFinding[];
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -30,6 +50,7 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   testStates: Record<string, TestState>;
+  scanResults: ScanImportBatch[];
 }
 
 export interface ProjectSummary {
@@ -49,3 +70,5 @@ export const EMPTY_TEST_STATE: TestState = {
 };
 
 export const EMPTY_TEST_STATES: Record<string, TestState> = {};
+
+export const EMPTY_SCAN_RESULTS: ScanImportBatch[] = [];

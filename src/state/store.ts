@@ -1,10 +1,20 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import { api } from '../api/client';
-import type { Project, ProjectSummary, TestState, LinkItem, CustomCommand, TestStatus } from '../types';
+import type {
+  Project,
+  ProjectSummary,
+  TestState,
+  LinkItem,
+  CustomCommand,
+  TestStatus,
+  ScanTool,
+  ScanImportBatch,
+} from '../types';
 import { detectLinkType } from '../utils/links';
 import { ALL_TESTS } from '../data/wstg';
 import type { Language } from '../i18n/translations';
+import { parseNucleiJson, parseNmapJson } from '../utils/scanImport';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 export type Theme = 'light' | 'dark';
@@ -34,6 +44,9 @@ interface AppState {
   restoreDefaultTools(testId: string): void;
   addLink(testId: string, url: string, title?: string): void;
   removeLink(testId: string, linkId: string): void;
+
+  importScanResults(tool: ScanTool, file: File): Promise<ScanImportBatch>;
+  removeScanBatch(batchId: string): void;
 
   setTheme(theme: Theme): void;
   setLanguage(language: Language): void;
@@ -78,6 +91,10 @@ function normalizeTestState(state?: Partial<TestState>): TestState {
 
 function ensureTestState(project: Project, testId: string): TestState {
   return normalizeTestState(project.testStates[testId]);
+}
+
+function normalizeProject(project: Project): Project {
+  return { ...project, scanResults: project.scanResults ?? [] };
 }
 
 function getInitialTheme(): Theme {
@@ -131,7 +148,7 @@ export const useStore = create<AppState>((set, get) => ({
   async selectProject(id) {
     set({ loading: true });
     try {
-      const project = await api.get(id);
+      const project = normalizeProject(await api.get(id));
       set({ currentProject: project, loading: false, saveStatus: 'idle' });
       localStorage.setItem('wstg-last-project', id);
     } catch {
@@ -140,7 +157,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   async createProject(name, target) {
-    const project = await api.create(name, target);
+    const project = normalizeProject(await api.create(name, target));
     set({ projects: [{ ...project }, ...get().projects], currentProject: project, saveStatus: 'idle' });
     localStorage.setItem('wstg-last-project', project.id);
   },
@@ -263,6 +280,35 @@ export const useStore = create<AppState>((set, get) => ({
     scheduleSave(get, set);
   },
 
+  async importScanResults(tool, file) {
+    const current = get().currentProject;
+    if (!current) throw new Error('no-project');
+    const text = await file.text();
+    const findings = tool === 'nuclei' ? parseNucleiJson(text) : parseNmapJson(text);
+    if (findings.length === 0) {
+      throw new Error('no-findings');
+    }
+    const batch: ScanImportBatch = {
+      id: nanoid(8),
+      tool,
+      fileName: file.name,
+      importedAt: new Date().toISOString(),
+      findings,
+    };
+    const scanResults = [batch, ...current.scanResults];
+    set({ currentProject: { ...current, scanResults } });
+    scheduleSave(get, set);
+    return batch;
+  },
+
+  removeScanBatch(batchId) {
+    const current = get().currentProject;
+    if (!current) return;
+    const scanResults = current.scanResults.filter((b) => b.id !== batchId);
+    set({ currentProject: { ...current, scanResults } });
+    scheduleSave(get, set);
+  },
+
   setTheme(theme) {
     localStorage.setItem('wstg-theme', theme);
     document.documentElement.dataset.theme = theme;
@@ -307,12 +353,15 @@ export const useStore = create<AppState>((set, get) => ({
       if (known.has(id)) testStates[id] = normalizeTestState(state);
     }
     const fallbackName = get().language === 'cs' ? 'Importovaný pentest' : 'Imported pentest';
-    const project = await api.import({
-      name: parsed.name || fallbackName,
-      target: parsed.target || '',
-      createdAt: parsed.createdAt,
-      testStates,
-    });
+    const project = normalizeProject(
+      await api.import({
+        name: parsed.name || fallbackName,
+        target: parsed.target || '',
+        createdAt: parsed.createdAt,
+        testStates,
+        scanResults: Array.isArray(parsed.scanResults) ? parsed.scanResults : [],
+      })
+    );
     set({ projects: [{ ...project }, ...get().projects], currentProject: project, saveStatus: 'idle' });
     localStorage.setItem('wstg-last-project', project.id);
   },

@@ -155,6 +155,149 @@
   color: var(--text-faint);
 }
 
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 2px;
+  flex-shrink: 0;
+}
+
+.sidebar-scan-btn {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-scan-btn .sidebar-cat-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ---------- Scan import ---------- */
+
+.scan-upload-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.scan-upload-card {
+  flex: 1;
+  min-width: 220px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.scan-upload-card.drag-over {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.scan-upload-title {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.scan-upload-hint {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+.scan-upload-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.scan-upload-message {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.scan-upload-message.error {
+  color: var(--status-fail);
+}
+
+.scan-upload-message.success {
+  color: var(--status-pass);
+}
+
+.scan-batch-count {
+  font-size: 11px;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.scan-table-wrap {
+  overflow-x: auto;
+}
+
+.scan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.scan-table th {
+  text-align: left;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.scan-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.scan-detail-cell {
+  color: var(--text-dim);
+  max-width: 420px;
+}
+
+.scan-severity-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--accent-text);
+}
+
+.scan-severity-badge.status-fail {
+  background: var(--status-fail);
+}
+
+.scan-severity-badge.status-in-progress {
+  background: var(--status-in-progress);
+}
+
+.scan-severity-badge.status-pass {
+  background: var(--status-pass);
+}
+
+.scan-severity-badge.status-na {
+  background: var(--status-na);
+}
+
+.scan-severity-badge.status-not-tested {
+  background: var(--status-not-tested);
+}
+
 /* ---------- Toolbar / search / filters ---------- */
 
 .main-toolbar {

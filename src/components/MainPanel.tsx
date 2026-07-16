@@ -2,9 +2,11 @@ import { Search } from 'lucide-react';
 import { WSTG_CATEGORIES, ALL_TESTS, getTitle } from '../data/wstg';
 import { useStore } from '../state/store';
 import { TestCard } from './TestCard';
+import { ScanImportPanel } from './ScanImportPanel';
 import { EMPTY_TEST_STATES, type TestStatus } from '../types';
 import { useT, useLanguage } from '../i18n/useT';
 import type { TranslationKey } from '../i18n/translations';
+import type { AppView } from '../App';
 
 const FILTERS: { value: TestStatus | 'all'; key: TranslationKey }[] = [
   { value: 'all', key: 'filter.all' },
@@ -15,7 +17,7 @@ const FILTERS: { value: TestStatus | 'all'; key: TranslationKey }[] = [
   { value: 'na', key: 'status.na' },
 ];
 
-export function MainPanel({ activeCategoryId }: { activeCategoryId: string }) {
+export function MainPanel({ activeView, activeCategoryId }: { activeView: AppView; activeCategoryId: string }) {
   const t = useT();
   const language = useLanguage();
   const searchQuery = useStore((s) => s.searchQuery);
@@ -24,6 +26,10 @@ export function MainPanel({ activeCategoryId }: { activeCategoryId: string }) {
   const setFilterStatus = useStore((s) => s.setFilterStatus);
   const testStates = useStore((s) => s.currentProject?.testStates ?? EMPTY_TEST_STATES);
   const currentProject = useStore((s) => s.currentProject);
+
+  if (activeView === 'scan-import') {
+    return <ScanImportPanel />;
+  }
 
   if (!currentProject) {
     return (

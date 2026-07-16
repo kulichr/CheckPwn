@@ -19,7 +19,7 @@ export const api = {
     fetch(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, target, testStates: {} }),
+      body: JSON.stringify({ name, target, testStates: {}, scanResults: [] }),
     }).then((r) => handle(r)),
 
   save: (project: Project): Promise<Project> =>

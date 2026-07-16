@@ -13,11 +13,14 @@ import { ImportExportBar } from './components/ImportExportBar';
 import { SaveIndicator } from './components/SaveIndicator';
 import { useT } from './i18n/useT';
 
+export type AppView = 'checklist' | 'scan-import';
+
 function App() {
   const t = useT();
   const init = useStore((s) => s.init);
   const loading = useStore((s) => s.loading);
   const currentProject = useStore((s) => s.currentProject);
+  const [activeView, setActiveView] = useState<AppView>('checklist');
   const [activeCategoryId, setActiveCategoryId] = useState(WSTG_CATEGORIES[0].id);
 
   useEffect(() => {
@@ -43,13 +46,18 @@ function App() {
       </header>
 
       <div className="body-layout">
-        <Sidebar activeId={activeCategoryId} onSelect={setActiveCategoryId} />
+        <Sidebar
+          activeView={activeView}
+          activeId={activeCategoryId}
+          onSelectView={setActiveView}
+          onSelect={setActiveCategoryId}
+        />
         {loading && !currentProject ? (
           <div className="main-panel">
             <div className="empty-state">{t('app.loading')}</div>
           </div>
         ) : (
-          <MainPanel activeCategoryId={activeCategoryId} />
+          <MainPanel activeView={activeView} activeCategoryId={activeCategoryId} />
         )}
       </div>
     </div>
