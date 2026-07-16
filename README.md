@@ -17,8 +17,15 @@ A local-first checklist app for penetration testers. It walks you through every 
 - Multiple named pentests — switch between them any time, each with its own saved state.
 - Autosave to a local JSON file (debounced), plus full export/import.
 - English and Czech UI, light and dark mode, responsive layout.
+- Import scanner results — bring in Nuclei (`-jsonl`) and Nmap JSON findings, saved into the pentest alongside the checklist.
 
 ![Test detail with tools, custom commands, notes and a link thumbnail](docs/screenshots/test-detail-dark.png)
+
+## Scanner import
+
+Bring automated scan output straight into a pentest from the **Scan import** tab: upload Nuclei JSON/JSONL output, or Nmap JSON (converted from `-oX`, or python-nmap's `scan` dict) — findings are parsed, normalized, and stored per-pentest.
+
+![Scanner import tab showing parsed Nuclei and Nmap findings](docs/screenshots/scan-import-dark.png)
 
 ## Getting started
 
